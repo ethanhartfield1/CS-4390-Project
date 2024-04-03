@@ -14,6 +14,8 @@ class TCPServer {
 
             System.out.println("Server is UP and running!");
             Socket connectionSocket = welcomeSocket.accept();
+            System.out.println("Connection from client: who, when, and how long.");
+            System.out.println(connectionSocket.getInetAddress());
 
             BufferedReader inFromClient =
                     new BufferedReader(new
@@ -32,3 +34,4 @@ class TCPServer {
         }
     }
 }
+
