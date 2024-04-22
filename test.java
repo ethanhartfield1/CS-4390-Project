@@ -3,35 +3,52 @@ import java.net.*;
 
 class TCPServer {
 
-    public static void main(String argv[]) throws Exception
-    {
-        String clientSentence;
-        String capitalizedSentence;
+    public static void main(String argv[]) throws Exception {
 
         ServerSocket welcomeSocket = new ServerSocket(6789);
 
-        while(true) {
-
+        //Loop for new clients to create a thread for
+        while (true) {
             System.out.println("Server is UP and running!");
             Socket connectionSocket = welcomeSocket.accept();
-            System.out.println("Connection from client: who, when, and how long.");
-            System.out.println(connectionSocket.getInetAddress());
 
-            BufferedReader inFromClient =
-                    new BufferedReader(new
-                            InputStreamReader(connectionSocket.getInputStream()));
+            // Create a new thread for continued communication with a specific client
+            clientThread clientThread = new clientThread(connectionSocket);
+            clientThread.runClient();
+        }
+    }
 
+    public static class clientThread extends Thread {
+        String clientSentence;
+        String capitalizedSentence;
 
-            DataOutputStream  outToClient =
-                    new DataOutputStream(connectionSocket.getOutputStream());
+        private Socket connectionSocket;
 
-            clientSentence = inFromClient.readLine();
+        public clientThread(Socket connectionSocket) {this.connectionSocket = connectionSocket;}
+        
+        //Loop for the thread connection.
+        public void runClient() {
+            try {
+                // Create communication streams (same as sample codes)
+                BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+                DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 
-            System.out.println("Server received message!" + clientSentence);
-            capitalizedSentence = clientSentence.toUpperCase() + '\n';
-
-            outToClient.writeBytes(capitalizedSentence);
+                // Process messages until client disconnects (by typing exit)
+                while (true) {
+                    clientSentence = inFromClient.readLine();
+                    if (clientSentence == null) { // when user types exit the server gets an empty response (will happen as client disconnects from server)
+                        break;
+                    }
+                    System.out.println("Server received message! (" + clientSentence + ")");
+                    capitalizedSentence = clientSentence.toUpperCase() + '\n';// still capitalizes but goal is to calculate strings)
+                    outToClient.writeBytes(capitalizedSentence);
+                }
+                // Close connection with individual client
+                connectionSocket.close();
+            } catch (IOException e) {
+                // Handle any exceptions during communication
+                e.printStackTrace();
+            }
         }
     }
 }
-
