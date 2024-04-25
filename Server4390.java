@@ -14,7 +14,7 @@ class TCPServer {
 
             // Create a new thread for continued communication with a specific client
             clientThread clientThread = new clientThread(connectionSocket);
-            clientThread.runClient();
+            clientThread.start();
         }
     }
 
@@ -27,7 +27,7 @@ class TCPServer {
         public clientThread(Socket connectionSocket) {this.connectionSocket = connectionSocket;}
         
         //Loop for the thread connection.
-        public void runClient() {
+        public void run() {
             try {
                 // Create communication streams (same as sample codes)
                 BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
