@@ -1,3 +1,3 @@
-project: Server4390.java Main.java
-	javac Server4390.java
-	javac Main.java
+project: TCPmathServer.java TCPClient1.java
+	javac TCPmathServer.java
+	javac TCPClient1.java
