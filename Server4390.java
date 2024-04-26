@@ -56,6 +56,9 @@ class TCPmathServer {
 
                     operationS = inFromClient.readLine();
 
+                    if (operationS.equalsIgnoreCase("exit")) { // when user types exit the server gets an empty response (will happen as client disconnects from server)
+                        break;
+                    }
                     //Calculator function
                     if (operationS.equals("+")||operationS.equals("-")||operationS.equals("*")||operationS.equals("/")){
                         currentOpp = operationS;
@@ -69,9 +72,6 @@ class TCPmathServer {
                         currentOpp = "";
                     }
 
-                    if (operationS.equalsIgnoreCase("exit")) { // when user types exit the server gets an empty response (will happen as client disconnects from server)
-                        break;
-                    }
 
                     System.out.println("Server received request from "+ userName + "! (" + number + " " + currentOpp + " )");
                     outToClient.writeBytes(String.valueOf(number) + currentOpp + "\n");
