@@ -74,7 +74,7 @@ class TCPmathServer {
 
 
                     System.out.println("Server received request from "+ userName + "! (" + number + " " + currentOpp + " )");
-                    outToClient.writeBytes(String.valueOf(number) + currentOpp + "\n");
+                    outToClient.writeBytes(String.valueOf(number) + " " + currentOpp + "\n");
                 }
 
                 // Close connection with individual client by closing thread
